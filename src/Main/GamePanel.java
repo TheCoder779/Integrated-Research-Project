@@ -7,34 +7,31 @@ import java.io.IOException;
 
 public class GamePanel extends JPanel implements Runnable {
     private ScrollingBackground background;
-    private Thread gameThread;
-    private boolean running = true;
-    private final int WIDTH = 800;
-    private final int HEIGHT = 600;
-    private final int FPS = 60;
 
     public GamePanel() {
+        int WIDTH = 960;
+        int HEIGHT = 720;
         this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         this.setBackground(Color.BLACK);
 
         try {
-            // Load your 960x720 background image
-            background = new ScrollingBackground("path/to/your/background.png", WIDTH, HEIGHT);
+            background = new ScrollingBackground(WIDTH);
         } catch (IOException e) {
-            e.printStackTrace();
+            IO.print("An error has occurred constructing the game panel");
         }
 
-        gameThread = new Thread(this);
+        Thread gameThread = new Thread(this);
         gameThread.start();
     }
 
     @Override
     public void run() {
         long lastTime = System.nanoTime();
+        int FPS = 60;
         double ns = 1000000000.0 / FPS;
         double delta = 0;
 
-        while (running) {
+        while (true) {
             long currentTime = System.nanoTime();
             delta += (currentTime - lastTime) / ns;
             lastTime = currentTime;
@@ -49,9 +46,7 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     private void update() {
-        // Scroll the background to the left (positive value moves it left)
-        // Adjust the speed value (2.0f) to control how fast it scrolls
-        background.update(2.0f);
+        background.update(5.0f);
     }
 
     @Override
@@ -61,12 +56,12 @@ public class GamePanel extends JPanel implements Runnable {
 
         background.draw(g2d);
 
-        // Draw your player, enemies, and other game objects here
+        // Draw the player, enemies, and other game objects here
 
         g2d.dispose();
     }
 
-    public static void main(String[] args) {
+    static void main() {
         JFrame frame = new JFrame("Chesapeake Chase");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.add(new GamePanel());
