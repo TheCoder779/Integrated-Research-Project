@@ -1,4 +1,4 @@
-package Main;
+package Entity;
 
 public class Entity {
     public int x;

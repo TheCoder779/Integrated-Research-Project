@@ -2,7 +2,8 @@ package Main;
 
 import java.awt.event.*;
 
-public class KeyHandler implements KeyListener, MouseListener, MouseMotionListener {
+public class KeyHandler implements KeyListener {
+    public boolean upPressed, downPressed, leftPressed, rightPressed = false;
     @Override
     public void keyTyped(KeyEvent e) {
 
@@ -11,45 +12,33 @@ public class KeyHandler implements KeyListener, MouseListener, MouseMotionListen
     @Override
     public void keyPressed(KeyEvent e) {
 
+        int code = e.getKeyCode();
+
+        if (code == KeyEvent.VK_UP ||  code == KeyEvent.VK_W) {
+            upPressed = true;
+        }else if(code == KeyEvent.VK_DOWN ||  code == KeyEvent.VK_S) {
+            downPressed = true;
+        }else if(code == KeyEvent.VK_LEFT  ||  code == KeyEvent.VK_A) {
+            leftPressed = true;
+        }else if(code == KeyEvent.VK_RIGHT  ||  code == KeyEvent.VK_D) {
+            rightPressed = true;
+        }
+
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
 
-    }
+        int code = e.getKeyCode();
 
-    @Override
-    public void mouseClicked(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseDragged(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseMoved(MouseEvent e) {
-
+        if (code == KeyEvent.VK_UP ||  code == KeyEvent.VK_W) {
+            upPressed = false;
+        }else if(code == KeyEvent.VK_DOWN ||  code == KeyEvent.VK_S) {
+            downPressed = false;
+        }else if(code == KeyEvent.VK_LEFT  ||  code == KeyEvent.VK_A) {
+            leftPressed = false;
+        }else if(code == KeyEvent.VK_RIGHT  ||  code == KeyEvent.VK_D) {
+            rightPressed = false;
+        }
     }
 }

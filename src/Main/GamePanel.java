@@ -1,6 +1,6 @@
 package Main;
 
-
+import Entity.*;
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
@@ -8,10 +8,12 @@ import java.io.IOException;
 public class GamePanel extends JPanel implements Runnable {
     private ScrollingBackground background;
     public Player player;
+    KeyHandler keyH = new KeyHandler();
 
     public GamePanel() {
         int WIDTH = 960;
         int HEIGHT = 720;
+        this.setDoubleBuffered(true);
         this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         this.setBackground(Color.BLACK);
         try {
@@ -19,6 +21,8 @@ public class GamePanel extends JPanel implements Runnable {
         } catch (IOException e) {
             IO.print("An error has occurred constructing the game panel");
         }
+        this.addKeyListener(keyH);
+        this.setFocusable(true);
         player = new Player();
         Thread gameThread = new Thread(this);
         gameThread.start();
@@ -48,6 +52,15 @@ public class GamePanel extends JPanel implements Runnable {
 
     private void update() {
         background.update(5.0f);
+        if(keyH.upPressed){
+            player.playerY -= player.playerSpeed;
+        }else if (keyH.downPressed){
+            player.playerY += player.playerSpeed;
+        }else if (keyH.leftPressed){
+            player.playerX -= player.playerSpeed;
+        }else if (keyH.rightPressed){
+            player.playerX += player.playerSpeed;
+        }
     }
 
     @Override

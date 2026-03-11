@@ -1,4 +1,4 @@
-package Main;
+package Entity;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -12,6 +12,7 @@ public class Player extends Entity {
     public int size = 48;
     public int playerX = 240;
     public int playerY = 360;
+    public int playerSpeed = 4;
 
     public Player(){
         super(240, 360);
