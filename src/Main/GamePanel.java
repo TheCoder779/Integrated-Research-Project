@@ -16,6 +16,12 @@ public class GamePanel extends JPanel implements Runnable {
     static GamePanel gamepanel = new GamePanel();
     Thread gameThread = new Thread(this);
     static int score = 0;
+    public boolean easyMode = true;
+    public boolean normalMode = false;
+    public boolean hardMode = false;
+    public boolean impossibleMode = false;
+    public boolean do_not_even_try = false;
+    int rand;
 
     public GamePanel() {
         int WIDTH = 960;
@@ -71,7 +77,18 @@ public class GamePanel extends JPanel implements Runnable {
         if(keyH.exitPressed){
             System.exit(0);
         }
-        int rand = (int) (Math.random() * 60);
+        if(easyMode){
+             rand =(int) (Math.random()*100);
+        }else if(normalMode){
+             rand =(int) (Math.random()*60);
+        }else if(hardMode){
+             rand =(int) (Math.random()*20);
+        }else if(impossibleMode){
+             rand =(int) (Math.random()*10);
+        }
+        else if(do_not_even_try){
+             rand = 0;
+        }
         if (rand == 0) {
             garbage.add(new Garbage(960, (int) (Math.random() * 624 + 48)));
         }
@@ -103,8 +120,7 @@ public class GamePanel extends JPanel implements Runnable {
         for(int i = 0; i < garbage.size(); i++) {
             if((player.x - garbage.get(i).garbX >= -48) && (player.x - garbage.get(i).garbX <= 48) && (player.y - garbage.get(i).garbY <= 48) && (player.y - garbage.get(i).garbY >= -48)) {
                 player.isalive = false;
-                frame.setVisible(false);
-
+                System.exit(0);
             }
         }
     }
