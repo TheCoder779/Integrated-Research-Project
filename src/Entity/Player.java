@@ -10,9 +10,9 @@ public class Player extends Entity {
     public boolean isalive;
     public BufferedImage Sprite;
     public int size = 48;
-    public int playerX = 240;
-    public int playerY = 360;
-    public int playerSpeed = 4;
+    public int x = 240;
+    public int y = 360;
+    public int playerSpeed = 5;
 
     public Player(){
         super(240, 360);
@@ -25,6 +25,6 @@ public class Player extends Entity {
     }
 
     public void draw(Graphics2D g) {
-        g.drawImage(Sprite, playerX - size / 2, playerY - size / 2, size, size, null);
+        g.drawImage(Sprite, x - size / 2, y - size / 2, size, size, null);
     }
 }

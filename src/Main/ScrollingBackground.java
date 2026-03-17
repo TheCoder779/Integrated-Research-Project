@@ -19,7 +19,6 @@ public class ScrollingBackground {
         this.scrollX = 0;
     }
 
-
     public void update(float speed) {
         scrollX += speed;
 
@@ -30,7 +29,6 @@ public class ScrollingBackground {
             scrollX += imageWidth;
         }
     }
-
 
     public void draw(Graphics2D g) {
         int offsetX = (int) -scrollX;
