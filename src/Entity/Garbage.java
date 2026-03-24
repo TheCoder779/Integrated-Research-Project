@@ -19,7 +19,7 @@ public class Garbage extends Entity {
         garbY = y;
         super(x, y);
         try {
-            GarbageSprites[0] = ImageIO.read(new File("res/Player/boy_down_1.png"));
+            GarbageSprites[0] = ImageIO.read(new File("res/boy_down_1.png"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

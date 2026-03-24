@@ -18,7 +18,7 @@ public class Player extends Entity {
         super(240, 360);
         isalive = true;
         try {
-            Sprite = ImageIO.read(new File("res/Player/boy_down_1.png"));
+            Sprite = ImageIO.read(new File("res/boy_down_1.png"));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

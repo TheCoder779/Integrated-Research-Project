@@ -4,10 +4,14 @@ import java.awt.event.*;
 
 public class KeyHandler implements KeyListener {
     public boolean upPressed, downPressed, leftPressed, rightPressed = false;
-    public boolean exitPressed;
+    public boolean exitPressed = false;
+    public boolean enterPressed = false;
     @Override
     public void keyTyped(KeyEvent e) {
-
+        int code = e.getKeyCode();
+        if(code == KeyEvent.VK_ENTER){
+            enterPressed = true;
+        }
     }
 
     @Override

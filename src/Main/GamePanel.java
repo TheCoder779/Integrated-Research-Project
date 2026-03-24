@@ -1,6 +1,8 @@
 package Main;
 
-import Entity.*;
+import Entity.Garbage;
+import Entity.Player;
+
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
@@ -16,44 +18,46 @@ public class GamePanel extends JPanel implements Runnable {
     static GamePanel gamepanel = new GamePanel();
     Thread gameThread = new Thread(this);
     static int score = 0;
-    public boolean easyMode = true;
+    public boolean easyMode = false;
     public boolean normalMode = false;
-    public boolean hardMode = false;
+    public boolean hardMode = true;
     public boolean impossibleMode = false;
     public boolean do_not_even_try = false;
     int rand;
 
-    public GamePanel() {
+    public GamePanel()
+    {
         int WIDTH = 960;
         int HEIGHT = 720;
         this.setDoubleBuffered(true);
         this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         this.setBackground(Color.BLACK);
+        this.addKeyListener(keyH);
+        this.setFocusable(true);
+        this.setVisible(true);
+        gameThread.start();
+        player = new Player();
         try {
             background = new ScrollingBackground(WIDTH);
         } catch (IOException e) {
             IO.print("An error has occurred constructing the game panel");
         }
-        this.addKeyListener(keyH);
-        this.setFocusable(true);
-        player = new Player();
-        gameThread.start();
     }
 
     @Override
     public void run() {
         long lastTime = System.nanoTime();
         double delta = 1000000000.0 / FPS;
-        double timeleft = 0;
+        double timeLeft = 0;
 
         while (true) {
             long currentTime = System.nanoTime();
-            timeleft += (currentTime - lastTime) / delta;
+            timeLeft += (currentTime - lastTime) / delta;
             lastTime = currentTime;
 
-            while (timeleft >= 1) {
+            while (timeLeft >= 1) {
                 update();
-                timeleft--;
+                timeLeft--;
             }
 
             repaint();
@@ -62,10 +66,10 @@ public class GamePanel extends JPanel implements Runnable {
 
     private void update() {
         background.update(3.0f);
-        if (keyH.upPressed) {
+        if (keyH.upPressed && player.y > 24) {
             player.y -= player.playerSpeed;
         }
-        if (keyH.downPressed) {
+        if (keyH.downPressed && player.y < 696) {
             player.y += player.playerSpeed;
         }
         if (keyH.leftPressed) {
@@ -102,13 +106,14 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     @Override
-    protected void paintComponent(Graphics g) {
+    protected void paintComponent(Graphics g)
+    {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
-
         background.draw(g2d);
         player.draw(g2d);
-        for (int i = 0; i < garbage.size(); i++) {
+        for (int i = 0; i < garbage.size(); i++)
+        {
             garbage.get(i).draw(g2d);
         }
         showScore(g2d);
@@ -116,22 +121,27 @@ public class GamePanel extends JPanel implements Runnable {
         g2d.dispose();
     }
 
-    public void checkIfDead() {
-        for(int i = 0; i < garbage.size(); i++) {
-            if((player.x - garbage.get(i).garbX >= -48) && (player.x - garbage.get(i).garbX <= 48) && (player.y - garbage.get(i).garbY <= 48) && (player.y - garbage.get(i).garbY >= -48)) {
+    public void checkIfDead()
+    {
+        for (Garbage value : garbage)
+        {
+            if ((player.x - value.garbX >= -48) && (player.x - value.garbX <= 48) && (player.y - value.garbY <= 48) && (player.y - value.garbY >= -48))
+            {
                 player.isalive = false;
                 System.exit(0);
             }
         }
     }
 
-    public void showScore(Graphics2D g){
+    public void showScore(Graphics2D g)
+    {
         g.setColor(Color.WHITE);
         g.setFont(new Font("Arial", Font.BOLD, 30));
         g.drawString("Score: " + score, 10, 30);
     }
 
-    static void main() {
+    static void main()
+    {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
         frame.add(gamepanel);
