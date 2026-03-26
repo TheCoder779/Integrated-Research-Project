@@ -9,6 +9,9 @@ out/
 
 *.xml
 
+META-INF
+*.MF
+
 
 .idea/
 

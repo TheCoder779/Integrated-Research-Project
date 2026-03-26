@@ -18,9 +18,10 @@ public class GamePanel extends JPanel implements Runnable {
     static GamePanel gamepanel = new GamePanel();
     Thread gameThread = new Thread(this);
     static int score = 0;
-    public boolean easyMode = false;
+    public boolean noEnemies = false;
+    public boolean easyMode = true;
     public boolean normalMode = false;
-    public boolean hardMode = true;
+    public boolean hardMode = false;
     public boolean impossibleMode = false;
     public boolean do_not_even_try = false;
     int rand;
@@ -72,23 +73,25 @@ public class GamePanel extends JPanel implements Runnable {
         if (keyH.downPressed && player.y < 696) {
             player.y += player.playerSpeed;
         }
-        if (keyH.leftPressed) {
+        if (keyH.leftPressed && player.x > 24) {
             player.x -= player.playerSpeed;
         }
-        if (keyH.rightPressed) {
+        if (keyH.rightPressed && player.x < 936) {
             player.x += player.playerSpeed;
         }
         if(keyH.exitPressed){
             System.exit(0);
         }
-        if(easyMode){
-             rand =(int) (Math.random()*100);
+        if(noEnemies){
+            rand = 1;
+        }else if(easyMode){
+             rand =(int) (Math.random()*50);
         }else if(normalMode){
-             rand =(int) (Math.random()*60);
-        }else if(hardMode){
              rand =(int) (Math.random()*20);
+        }else if(hardMode){
+             rand =(int) (Math.random()*5);
         }else if(impossibleMode){
-             rand =(int) (Math.random()*10);
+             rand =(int) (Math.random()*3);
         }
         else if(do_not_even_try){
              rand = 0;
