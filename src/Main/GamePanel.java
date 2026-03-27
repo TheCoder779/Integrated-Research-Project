@@ -13,17 +13,19 @@ public class GamePanel extends JPanel implements Runnable {
     public static Player player;
     KeyHandler keyH = new KeyHandler();
     ArrayList<Garbage> garbage = new ArrayList<>();
-    static int FPS = 60;
+    static int FPS = 30;
     static JFrame frame = new JFrame("Chesapeake Chase");
     static GamePanel gamepanel = new GamePanel();
     Thread gameThread = new Thread(this);
     static int score = 0;
     public boolean noEnemies = false;
-    public boolean easyMode = true;
-    public boolean normalMode = false;
+    public boolean easyMode = false;
+    public boolean normalMode = true;
     public boolean hardMode = false;
     public boolean impossibleMode = false;
     public boolean do_not_even_try = false;
+    int spriteNum = 1;
+    int spriteTimer = 0;
     int rand;
 
     public GamePanel()
@@ -66,7 +68,7 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     private void update() {
-        background.update(3.0f);
+        background.update(6.0f);
         if (keyH.upPressed && player.y > 24) {
             player.y -= player.playerSpeed;
         }
@@ -79,25 +81,28 @@ public class GamePanel extends JPanel implements Runnable {
         if (keyH.rightPressed && player.x < 936) {
             player.x += player.playerSpeed;
         }
+        if(!keyH.rightPressed && !keyH.leftPressed && !keyH.upPressed && !keyH.downPressed && player.x > 24){
+            player.x -=2;
+        }
         if(keyH.exitPressed){
             System.exit(0);
         }
         if(noEnemies){
             rand = 1;
         }else if(easyMode){
-             rand =(int) (Math.random()*50);
+             rand = (int) (Math.random()*50);
         }else if(normalMode){
-             rand =(int) (Math.random()*20);
+             rand = (int) (Math.random()*20);
         }else if(hardMode){
-             rand =(int) (Math.random()*5);
+             rand = (int) (Math.random()*5);
         }else if(impossibleMode){
-             rand =(int) (Math.random()*3);
+             rand = (int) (Math.random()*3);
         }
         else if(do_not_even_try){
              rand = 0;
         }
         if (rand == 0) {
-            garbage.add(new Garbage(960, (int) (Math.random() * 624 + 48)));
+            garbage.add(new Garbage(960, (int) (Math.random() * 720)));
         }
         for (int i = 0; i < garbage.size(); i++) {
             garbage.get(i).garbX -= garbage.get(i).garbSpeed;
@@ -105,6 +110,17 @@ public class GamePanel extends JPanel implements Runnable {
                 garbage.remove(i);
                 score++;
             }
+        }
+        spriteTimer++;
+        if(spriteTimer >=6){
+            if (spriteNum == 1)
+            {
+                spriteNum = 2;
+            } else if (spriteNum == 2)
+            {
+                spriteNum = 1;
+            }
+            spriteTimer = 0;
         }
     }
 
@@ -114,7 +130,7 @@ public class GamePanel extends JPanel implements Runnable {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
         background.draw(g2d);
-        player.draw(g2d);
+        player.draw(g2d, spriteNum);
         for (int i = 0; i < garbage.size(); i++)
         {
             garbage.get(i).draw(g2d);
@@ -128,7 +144,7 @@ public class GamePanel extends JPanel implements Runnable {
     {
         for (Garbage value : garbage)
         {
-            if ((player.x - value.garbX >= -48) && (player.x - value.garbX <= 48) && (player.y - value.garbY <= 48) && (player.y - value.garbY >= -48))
+            if ((player.x - value.garbX >= -42) && (player.x - value.garbX <= 42) && (player.y - value.garbY <= 42) && (player.y - value.garbY >= -42))
             {
                 player.isalive = false;
                 System.exit(0);

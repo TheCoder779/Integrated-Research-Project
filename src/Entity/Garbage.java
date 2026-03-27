@@ -13,7 +13,7 @@ public class Garbage extends Entity {
     public int size = 48;
     public int garbX;
     public int garbY;
-    public int garbSpeed = 3;
+    public int garbSpeed = 6;
 
     public Garbage(int x, int y) {
         garbX = x;
