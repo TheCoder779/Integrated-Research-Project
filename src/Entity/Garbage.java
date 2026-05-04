@@ -16,9 +16,10 @@ public class Garbage extends Entity {
     public int garbSpeed = 6;
 
     public Garbage(int x, int y) {
-        garbX = x;
+        // Swapped the positions of the super and the garbX/garbY because it caused an error - Edward Fix
+    	super(x, y);
+    	garbX = x;
         garbY = y;
-        super(x, y);
         try {
             GarbageSprites[0] = ImageIO.read(new File("res/plastic1.png"));
             GarbageSprites[1] = ImageIO.read(new File("res/plastic2.png"));
