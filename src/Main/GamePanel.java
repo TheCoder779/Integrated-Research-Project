@@ -43,7 +43,8 @@ public class GamePanel extends JPanel implements Runnable {
         try {
             background = new ScrollingBackground(WIDTH);
         } catch (IOException e) {
-            IO.print("An error has occurred constructing the game panel");
+            // Commented the IO print since it caused an error - Edward Fix
+        	//IO.print("An error has occurred constructing the game panel");
         }
     }
 
@@ -81,7 +82,8 @@ public class GamePanel extends JPanel implements Runnable {
         if (keyH.rightPressed && player.x < 936) {
             player.x += player.playerSpeed;
         }
-        if(!keyH.rightPressed && !keyH.leftPressed && !keyH.upPressed && !keyH.downPressed && player.x > 24){
+        // "!keyH.rightPressed && !keyH.leftPressed && !keyH.upPressed && !keyH.downPressed && "
+        if(player.x > 24){
             player.x -=2;
         }
         if(keyH.exitPressed){
@@ -144,7 +146,7 @@ public class GamePanel extends JPanel implements Runnable {
     {
         for (Garbage value : garbage)
         {
-            if ((player.x - value.garbX >= -42) && (player.x - value.garbX <= 42) && (player.y - value.garbY <= 42) && (player.y - value.garbY >= -42))
+            if ((player.x - value.garbX >= -29) && (player.x - value.garbX <= 29) && (player.y - value.garbY <= 29) && (player.y - value.garbY >= -29))
             {
                 player.isalive = false;
                 System.exit(0);
@@ -159,7 +161,8 @@ public class GamePanel extends JPanel implements Runnable {
         g.drawString("Score: " + score, 10, 30);
     }
 
-    static void main()
+    // Added "public" and "String[] args" because it wouldn't run without them - Edward Fix
+    public static void main(String[] args)
     {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
