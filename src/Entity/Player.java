@@ -13,7 +13,7 @@ public class Player extends Entity {
     public int size = 48;
     public int x = 240;
     public int y = 360;
-    public int playerSpeed = 10;
+    public int playerSpeed = 5;
 
     public Player(){
         super(240, 360);
