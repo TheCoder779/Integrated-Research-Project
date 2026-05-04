@@ -105,7 +105,7 @@ public class GamePanel extends JPanel implements Runnable {
             garbage.add(new Garbage(960, (int) (Math.random() * 720)));
         }
         for (int i = 0; i < garbage.size(); i++) {
-            garbage.get(i).garbX -= garbage.get(i).garbSpeed;
+            garbage.get(i).garbX -= Garbage.garbSpeed;
             if(garbage.get(i).garbX < 0){
                 garbage.remove(i);
                 score++;
