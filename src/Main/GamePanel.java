@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public class GamePanel extends JPanel implements Runnable {
     private ScrollingBackground background;
     public static Player player;
-    KeyHandler keyH = new KeyHandler();
+    KeyMouseHandler keyH = new KeyMouseHandler();
     ArrayList<Garbage> garbage = new ArrayList<>();
     static int FPS = 30;
     static JFrame frame = new JFrame("Chesapeake Chase");
