@@ -10,8 +10,9 @@ public class KeyMouseHandler implements KeyListener, MouseListener
     public boolean clicked;
     public int pressX, pressY;
     public boolean menu1StartCoordsPressed;
-    public int diffSelected;
+    public int diffSelected = -1;
     public boolean diffHasBeenSelected;
+    public boolean diffSelection = false;
 
     @Override
     public void keyTyped(KeyEvent e)
@@ -41,13 +42,13 @@ public class KeyMouseHandler implements KeyListener, MouseListener
         } else if (code == KeyEvent.VK_RIGHT || code == KeyEvent.VK_D)
         {
             rightPressed = true;
-        } else if (code == KeyEvent.VK_ESCAPE)
-        {
+        } else if (code == KeyEvent.VK_ESCAPE) {
             exitPressed = true;
         }
-        if(code == KeyEvent.VK_1 || code == KeyEvent.VK_2 || code == KeyEvent.VK_3 || code == KeyEvent.VK_4 || code == KeyEvent.VK_5)
-        {
+        if(diffSelection && (code == KeyEvent.VK_1 || code == KeyEvent.VK_2 || code == KeyEvent.VK_3 || code == KeyEvent.VK_4 || code == KeyEvent.VK_5))
+    {
             diffSelected = code - 49;
+            diffSelection = false;
             diffHasBeenSelected = true;
         }
     }
@@ -87,8 +88,10 @@ public class KeyMouseHandler implements KeyListener, MouseListener
             clicked = true;
             pressX = e.getX();
             pressY = e.getY();
-            if((pressX >= 360 && pressX <= 600) && (pressY >= 400 && pressY <= 490)){
+            if(e.getX() >= 360 && e.getY() >= 400 && e.getX() <= 600 && e.getY() <= 490)
+            {
                 menu1StartCoordsPressed = true;
+                diffSelection = true;
             }
         }
     }
@@ -97,6 +100,7 @@ public class KeyMouseHandler implements KeyListener, MouseListener
     public void mouseReleased(MouseEvent e)
     {
         clicked = false;
+        menu1StartCoordsPressed = false;
     }
 
     @Override

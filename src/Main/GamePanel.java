@@ -3,8 +3,10 @@ package Main;
 import Entity.Garbage;
 import Entity.Player;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -13,14 +15,15 @@ public class GamePanel extends JPanel implements Runnable {
     public static Player player;
     KeyMouseHandler keyH = new KeyMouseHandler();
     ArrayList<Garbage> garbage = new ArrayList<>();
-    static int FPS = 30;
+    static int FPS = 60;
     static JFrame frame = new JFrame("Chesapeake Chase");
     static GamePanel gamepanel = new GamePanel();
     Thread gameThread = new Thread(this);
     static int score = 0;
+    public boolean gameStarted = false;
     public boolean noEnemies = false;
     public boolean easyMode = false;
-    public boolean normalMode = true;
+    public boolean normalMode = false;
     public boolean hardMode = false;
     public boolean impossibleMode = false;
     public boolean do_not_even_try = false;
@@ -36,6 +39,7 @@ public class GamePanel extends JPanel implements Runnable {
         this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         this.setBackground(Color.BLACK);
         this.addKeyListener(keyH);
+        this.addMouseListener(keyH);
         this.setFocusable(true);
         this.setVisible(true);
         gameThread.start();
@@ -53,74 +57,76 @@ public class GamePanel extends JPanel implements Runnable {
         double delta = 1000000000.0 / FPS;
         double timeLeft = 0;
 
-        while (true) {
+        while (gameThread != null) {
             long currentTime = System.nanoTime();
             timeLeft += (currentTime - lastTime) / delta;
             lastTime = currentTime;
 
             while (timeLeft >= 1) {
                 update();
+                repaint();
                 timeLeft--;
             }
-
-            repaint();
         }
     }
 
     private void update() {
-        background.update(6.0f);
-        if (keyH.upPressed && player.y > 24) {
-            player.y -= player.playerSpeed;
+        if (keyH.diffHasBeenSelected)
+        {
+            gameStarted = true;
         }
-        if (keyH.downPressed && player.y < 696) {
-            player.y += player.playerSpeed;
-        }
-        if (keyH.leftPressed && player.x > 24) {
-            player.x -= player.playerSpeed;
-        }
-        if (keyH.rightPressed && player.x < 936) {
-            player.x += player.playerSpeed;
-        }
-        if(!keyH.rightPressed && !keyH.leftPressed && !keyH.upPressed && !keyH.downPressed && player.x > 24){
-            player.x -=2;
-        }
-        if(keyH.exitPressed){
-            System.exit(0);
-        }
-        if(noEnemies){
-            rand = 1;
-        }else if(easyMode){
-             rand = (int) (Math.random()*50);
-        }else if(normalMode){
-             rand = (int) (Math.random()*20);
-        }else if(hardMode){
-             rand = (int) (Math.random()*5);
-        }else if(impossibleMode){
-             rand = (int) (Math.random()*3);
-        }
-        else if(do_not_even_try){
-             rand = 0;
-        }
-        if (rand == 0) {
-            garbage.add(new Garbage(960, (int) (Math.random() * 720)));
-        }
-        for (int i = 0; i < garbage.size(); i++) {
-            garbage.get(i).garbX -= Garbage.garbSpeed;
-            if(garbage.get(i).garbX < 0){
-                garbage.remove(i);
-                score++;
+        if (gameStarted) {
+            background.update(6.0f);
+            if (keyH.upPressed && player.y > 24) {
+                player.y -= player.playerSpeed;
             }
-        }
-        spriteTimer++;
-        if(spriteTimer >=6){
-            if (spriteNum == 1)
-            {
-                spriteNum = 2;
-            } else if (spriteNum == 2)
-            {
-                spriteNum = 1;
+            if (keyH.downPressed && player.y < 696) {
+                player.y += player.playerSpeed;
             }
-            spriteTimer = 0;
+            if (keyH.leftPressed && player.x > 24) {
+                player.x -= player.playerSpeed;
+            }
+            if (keyH.rightPressed && player.x < 936) {
+                player.x += player.playerSpeed;
+            }
+            if (!keyH.rightPressed && !keyH.leftPressed && !keyH.upPressed && !keyH.downPressed && player.x > 24) {
+                player.x -= 2;
+            }
+            if (keyH.exitPressed) {
+                System.exit(0);
+            }
+            if (noEnemies) {
+                rand = 1;
+            }  if (easyMode) {
+                rand = (int) (Math.random() * 50);
+            }  if (normalMode) {
+                rand = (int) (Math.random() * 20);
+            }  if (hardMode) {
+                rand = (int) (Math.random() * 5);
+            }  if (impossibleMode) {
+                rand = (int) (Math.random() * 3);
+            }  if (do_not_even_try) {
+                rand = 0;
+            }
+            if (rand == 0) {
+                garbage.add(new Garbage(960, (int) (Math.random() * 720)));
+            }
+            for (int i = 0; i < garbage.size(); i++) {
+                garbage.get(i).garbX -= Garbage.garbSpeed;
+                if (garbage.get(i).garbX < 0) {
+                    garbage.remove(i);
+                    score++;
+                }
+            }
+            spriteTimer++;
+            if (spriteTimer >= 6) {
+                if (spriteNum == 1) {
+                    spriteNum = 2;
+                } else if (spriteNum == 2) {
+                    spriteNum = 1;
+                }
+                spriteTimer = 0;
+            }
         }
     }
 
@@ -129,15 +135,40 @@ public class GamePanel extends JPanel implements Runnable {
     {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
-        background.draw(g2d);
-        player.draw(g2d, spriteNum);
-        for (int i = 0; i < garbage.size(); i++)
-        {
-            garbage.get(i).draw(g2d);
+        if(!gameStarted){
+            if(!keyH.menu1StartCoordsPressed) {
+                try {
+                    g2d.drawImage(ImageIO.read(new File("res/menu.png")), 0, 0, 960, 720, null);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            if(keyH.diffSelection) {
+                try {
+                    g2d.drawImage(ImageIO.read(new File("res/diffselect.png")), 0, 0, 960, 720, null);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            if(keyH.diffHasBeenSelected){
+                if (keyH.diffSelected == 0) noEnemies = true;
+                if (keyH.diffSelected == 1) easyMode = true;
+                if (keyH.diffSelected == 2) normalMode = true;
+                if (keyH.diffSelected == 3) hardMode = true;
+                if (keyH.diffSelected == 4) impossibleMode = true;
+                if (keyH.diffSelected == 5) do_not_even_try = true;
+            }
         }
-        showScore(g2d);
-        checkIfDead();
-        g2d.dispose();
+        if(gameStarted) {
+            background.draw(g2d);
+            player.draw(g2d, spriteNum);
+            for (int i = 0; i < garbage.size(); i++) {
+                garbage.get(i).draw(g2d);
+            }
+            showScore(g2d);
+            checkIfDead();
+            g2d.dispose();
+        }
     }
 
     public void checkIfDead()
