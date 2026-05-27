@@ -13,15 +13,13 @@ public class KeyMouseHandler implements KeyListener, MouseListener
     public int diffSelected = -1;
     public boolean diffHasBeenSelected;
     public boolean diffSelection = false;
+    public boolean spacePressed = false;
+    public int numPressed = -1;
+    public boolean aNumPressed = false;
 
     @Override
     public void keyTyped(KeyEvent e)
     {
-        int code = e.getKeyCode();
-        if (code == KeyEvent.VK_ENTER)
-        {
-            enterPressed = true;
-        }
     }
 
     @Override
@@ -45,18 +43,23 @@ public class KeyMouseHandler implements KeyListener, MouseListener
         } else if (code == KeyEvent.VK_ESCAPE) {
             exitPressed = true;
         }
-        if(diffSelection && (code == KeyEvent.VK_1 || code == KeyEvent.VK_2 || code == KeyEvent.VK_3 || code == KeyEvent.VK_4 || code == KeyEvent.VK_5))
-    {
+        if(diffSelection && (code == KeyEvent.VK_1 || code == KeyEvent.VK_2 || code == KeyEvent.VK_3 || code == KeyEvent.VK_4 || code == KeyEvent.VK_5)) {
             diffSelected = code - 49;
             diffSelection = false;
             diffHasBeenSelected = true;
+        }
+        if(code == KeyEvent.VK_SPACE){
+            spacePressed = true;
+        }
+        if(code == KeyEvent.VK_1 || code == KeyEvent.VK_2 || code == KeyEvent.VK_3 || code == KeyEvent.VK_4 || code == KeyEvent.VK_5){
+            numPressed = code - 48;
+            aNumPressed = true;
         }
     }
 
     @Override
     public void keyReleased(KeyEvent e)
     {
-
         int code = e.getKeyCode();
 
         if (code == KeyEvent.VK_UP || code == KeyEvent.VK_W)
@@ -71,6 +74,13 @@ public class KeyMouseHandler implements KeyListener, MouseListener
         } else if (code == KeyEvent.VK_RIGHT || code == KeyEvent.VK_D)
         {
             rightPressed = false;
+        }
+        if(code == KeyEvent.VK_SPACE){
+            spacePressed = false;
+        }
+        if(code == KeyEvent.VK_1 || code == KeyEvent.VK_2 || code == KeyEvent.VK_3 || code == KeyEvent.VK_4 || code == KeyEvent.VK_5){
+            aNumPressed = false;
+            numPressed = -1;  // Add this line to reset numPressed
         }
     }
 

@@ -16,10 +16,8 @@ public class GamePanel extends JPanel implements Runnable {
     KeyMouseHandler keyH = new KeyMouseHandler();
     ArrayList<Garbage> garbage = new ArrayList<>();
     static int FPS = 60;
-    static JFrame frame = new JFrame("Chesapeake Chase");
-    static GamePanel gamepanel = new GamePanel();
     Thread gameThread = new Thread(this);
-    static int score = 0;
+    public int score = 0;
     public boolean gameStarted = false;
     public boolean noEnemies = false;
     public boolean easyMode = false;
@@ -27,6 +25,7 @@ public class GamePanel extends JPanel implements Runnable {
     public boolean hardMode = false;
     public boolean impossibleMode = false;
     public boolean do_not_even_try = false;
+    public boolean lessonMode = false;
     int spriteNum = 1;
     int spriteTimer = 0;
     int rand;
@@ -178,7 +177,8 @@ public class GamePanel extends JPanel implements Runnable {
             if ((player.x - value.garbX >= -42) && (player.x - value.garbX <= 42) && (player.y - value.garbY <= 42) && (player.y - value.garbY >= -42))
             {
                 player.isalive = false;
-                System.exit(0);
+                lessonMode = true;
+                break;
             }
         }
     }
@@ -188,16 +188,5 @@ public class GamePanel extends JPanel implements Runnable {
         g.setColor(Color.WHITE);
         g.setFont(new Font("Arial", Font.BOLD, 30));
         g.drawString("Score: " + score, 10, 30);
-    }
-
-    static void main()
-    {
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setResizable(false);
-        frame.add(gamepanel);
-        frame.pack();
-        frame.setLocationRelativeTo(null);
-        frame.setTitle("FPS: " + FPS);
-        frame.setVisible(true);
     }
 }
