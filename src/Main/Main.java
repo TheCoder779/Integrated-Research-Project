@@ -3,7 +3,7 @@ package Main;
 
 import javax.swing.*;
 public class Main {
-    public static void main() {
+     static void main() {
         JFrame frame = new JFrame("Chesapeake Chase");
         GamePanel gamepanel = new GamePanel();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
